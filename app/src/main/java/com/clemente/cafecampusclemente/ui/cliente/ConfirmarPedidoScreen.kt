@@ -23,9 +23,15 @@ import com.clemente.cafecampusclemente.model.ItemCarrito
 import java.util.Locale
 
 private val NaranjaCafe = Color(0xFFED5909)
-private val FondoCafe = Color(0xFFFFFAF5)
-private val TextoCafe = Color(0xFF292929)
-private val BordeCafe = Color(0xFFECE7E1)
+
+private val FondoCafe: Color
+    @Composable get() = MaterialTheme.colorScheme.background
+
+private val TextoCafe: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurface
+
+private val BordeCafe: Color
+    @Composable get() = MaterialTheme.colorScheme.outlineVariant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -150,7 +156,7 @@ fun ConfirmarPedidoScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 border = androidx.compose.foundation.BorderStroke(1.dp, BordeCafe)
             ) {
                 if (items.isEmpty()) {
@@ -197,14 +203,14 @@ fun ConfirmarPedidoScreen(
                                     )
                                     Text(
                                         "x${item.cantidad}",
-                                        color = Color.Gray,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         fontSize = 12.sp
                                     )
                                     if (item.nota.isNotBlank()) {
                                         Text(
                                             "Nota: ${item.nota}",
                                             fontSize = 11.sp,
-                                            color = Color.Gray
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }
                                 }
@@ -245,7 +251,7 @@ fun ConfirmarPedidoScreen(
                             horaRecojo = if (hora == "Ahora") "Ahora" else hora
                         },
                         shape = RoundedCornerShape(22.dp),
-                        color = if (seleccion) NaranjaCafe else Color.White,
+                        color = if (seleccion) NaranjaCafe else MaterialTheme.colorScheme.surface,
                         border = if (seleccion) null
                         else androidx.compose.foundation.BorderStroke(1.dp, BordeCafe)
                     ) {
@@ -278,7 +284,7 @@ fun ConfirmarPedidoScreen(
                             onClick = { pago = valor },
                             shape = RoundedCornerShape(12.dp),
                             color = if (seleccionado) Color(0xFFFFEBD8)
-                            else Color.White,
+                            else MaterialTheme.colorScheme.surface,
                             border = androidx.compose.foundation.BorderStroke(
                                 if (seleccionado) 1.5.dp else 1.dp,
                                 if (seleccionado) NaranjaCafe else BordeCafe
@@ -314,7 +320,7 @@ fun ConfirmarPedidoScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 border = androidx.compose.foundation.BorderStroke(1.dp, BordeCafe)
             ) {
                 Column(
@@ -325,7 +331,7 @@ fun ConfirmarPedidoScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Subtotal", color = Color.Gray, fontSize = 13.sp)
+                        Text("Subtotal", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
                         Text(
                             "S/ ${String.format(Locale.US, "%.2f", subtotal)}",
                             fontSize = 13.sp
@@ -335,7 +341,7 @@ fun ConfirmarPedidoScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Servicio", color = Color.Gray, fontSize = 13.sp)
+                        Text("Servicio", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
                         Text("S/ 0.00", fontSize = 13.sp)
                     }
                     HorizontalDivider(color = BordeCafe)

@@ -23,6 +23,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,10 +44,16 @@ import java.text.NumberFormat
 import java.util.Locale
 
 private val PedidosMorado = Color(0xFF5046E5)
-private val PedidosFondo = Color(0xFFF7F7FC)
-private val PedidosTexto = Color(0xFF20243A)
-private val PedidosSecundario = Color(0xFF777B91)
 private val PedidosRojo = Color(0xFFE54848)
+
+private val PedidosFondo: Color
+    @Composable get() = MaterialTheme.colorScheme.background
+
+private val PedidosTexto: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurface
+
+private val PedidosSecundario: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurfaceVariant
 
 @Composable
 fun PedidosAdminScreen(
@@ -209,7 +216,7 @@ private fun FiltroEstado(
         colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
             selectedContainerColor = PedidosMorado,
             selectedLabelColor = Color.White,
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.surface,
             labelColor = PedidosSecundario
         )
     )
@@ -232,7 +239,7 @@ private fun TarjetaPedidoAdmin(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(17.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         onClick = onVerDetalle
     ) {

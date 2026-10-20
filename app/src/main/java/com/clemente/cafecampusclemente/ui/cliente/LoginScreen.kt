@@ -52,8 +52,12 @@ import com.clemente.cafecampusclemente.model.Rol
 
 private val NaranjaCafe = Color(0xFFF15A0A)
 private val VioletaAdmin = Color(0xFF5145E5)
-private val FondoSelector = Color(0xFFF1F2F5)
-private val TextoSecundario = Color(0xFF777B86)
+
+private val FondoSelector: Color
+    @Composable get() = MaterialTheme.colorScheme.surfaceVariant
+
+private val TextoSecundario: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurfaceVariant
 
 @Composable
 fun LoginScreen(
@@ -94,7 +98,7 @@ fun LoginScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color.White
+        color = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = Modifier
@@ -108,7 +112,7 @@ fun LoginScreen(
                 text = "Bienvenido",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF252936)
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -310,7 +314,7 @@ fun LoginScreen(
                             .fillMaxWidth()
                             .padding(top = 18.dp)
                             .background(
-                                Color(0xFFEFEEFF),
+                                MaterialTheme.colorScheme.surfaceVariant,
                                 RoundedCornerShape(14.dp)
                             )
                             .padding(14.dp)
@@ -327,7 +331,7 @@ fun LoginScreen(
                         Text(
                             text = "Puedes cambiar de perfil desde Ajustes para probar ambos roles.",
                             fontSize = 11.sp,
-                            color = Color(0xFF77749D),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             lineHeight = 16.sp
                         )
                     }
@@ -353,7 +357,7 @@ private fun SelectorRol(
 
     val colorTexto by animateColorAsState(
         targetValue = if (seleccionado) Color.White
-        else Color(0xFF666B76),
+        else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = tween(250),
         label = "textoSelector"
     )

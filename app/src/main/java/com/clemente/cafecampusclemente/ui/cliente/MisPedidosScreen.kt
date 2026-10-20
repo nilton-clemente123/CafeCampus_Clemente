@@ -23,7 +23,9 @@ import com.clemente.cafecampusclemente.data.local.relation.PedidoConDetalle
 import java.util.Locale
 
 private val NaranjaMisPedidos = Color(0xFFED5909)
-private val FondoMisPedidos = Color(0xFFFFFAF5)
+
+private val FondoMisPedidos: Color
+    @Composable get() = MaterialTheme.colorScheme.background
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +62,7 @@ fun MisPedidosScreen(
             )
         },
         bottomBar = {
-            NavigationBar(containerColor = Color.White) {
+            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                 NavigationBarItem(
                     selected = false,
                     onClick = { },
@@ -137,7 +139,7 @@ fun MisPedidosScreen(
                         } else {
                             "Tus pedidos entregados y cancelados aparecerán aquí."
                         },
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp
                     )
                 }
@@ -175,13 +177,13 @@ private fun SelectorPedidos(
         modifier = modifier.height(38.dp),
         onClick = onClick,
         shape = RoundedCornerShape(13.dp),
-        color = if (seleccionado) Color.White else Color.Transparent,
+        color = if (seleccionado) MaterialTheme.colorScheme.surface else Color.Transparent,
         shadowElevation = if (seleccionado) 1.dp else 0.dp
     ) {
         Box(contentAlignment = Alignment.Center) {
             Text(
                 texto,
-                color = if (seleccionado) NaranjaMisPedidos else Color.Gray,
+                color = if (seleccionado) NaranjaMisPedidos else MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 13.sp
             )
@@ -199,11 +201,11 @@ private fun TarjetaPedidoCliente(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         border = androidx.compose.foundation.BorderStroke(
             1.dp,
-            Color(0xFFECE7E1)
+            MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -219,26 +221,26 @@ private fun TarjetaPedidoCliente(
                         "Pedido #${pedido.pedido.id}",
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        color = Color(0xFF292929)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         "Recojo: ${pedido.pedido.horaRecojo}",
                         fontSize = 11.sp,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowForwardIos,
                     contentDescription = "Ver seguimiento",
-                    tint = Color.Gray,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(15.dp)
                 )
             }
 
             EstadoPedidoEtiqueta(pedido.pedido.estado)
 
-            HorizontalDivider(color = Color(0xFFF0ECE7))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -247,7 +249,7 @@ private fun TarjetaPedidoCliente(
             ) {
                 Text(
                     "Total",
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 12.sp
                 )
                 Text(

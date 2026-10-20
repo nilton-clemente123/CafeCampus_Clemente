@@ -1,54 +1,55 @@
 package com.clemente.cafecampusclemente.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val MoradoPrincipal = Color(0xFF5046E5)
+private val NaranjaPrincipal = Color(0xFFEA580C)
+
+private val EsquemaClaro = lightColorScheme(
+    primary = MoradoPrincipal,
+    onPrimary = Color.White,
+    secondary = NaranjaPrincipal,
+    onSecondary = Color.White,
+    background = Color(0xFFF7F7FC),
+    onBackground = Color(0xFF20243A),
+    surface = Color.White,
+    onSurface = Color(0xFF20243A),
+    surfaceVariant = Color(0xFFEFF0F7),
+    onSurfaceVariant = Color(0xFF777B91),
+    outline = Color(0xFFE9E9F1),
+    outlineVariant = Color(0xFFE9E9F1),
+    error = Color(0xFFE34B4B),
+    onError = Color.White
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+private val EsquemaOscuro = darkColorScheme(
+    primary = Color(0xFF8F86FF),
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondary = Color(0xFFF0852C),
+    onSecondary = Color(0xFF3B1300),
+    background = Color(0xFF12121A),
+    onBackground = Color(0xFFECECF7),
+    surface = Color(0xFF1C1C27),
+    onSurface = Color(0xFFECECF7),
+    surfaceVariant = Color(0xFF26263A),
+    onSurfaceVariant = Color(0xFF9C9EB6),
+    outline = Color(0xFF2E2E3D),
+    outlineVariant = Color(0xFF2E2E3D),
+    error = Color(0xFFF2B8B5),
+    onError = Color(0xFF601410)
 )
 
 @Composable
 fun CafecampusTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val colorScheme = if (darkTheme) EsquemaOscuro else EsquemaClaro
 
     MaterialTheme(
         colorScheme = colorScheme,

@@ -6,13 +6,11 @@ import androidx.compose.material.icons.filled.Coffee
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-
-private val MoradoCafe = Color(0xFF5046E5)
 
 @Composable
 fun BarraNavegacionAdmin(
@@ -31,8 +29,8 @@ fun BarraNavegacionAdmin(
     }
 
     NavigationBar(
-        containerColor = Color.White,
-        contentColor = MoradoCafe
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.primary
     ) {
         NavigationBarItem(
             selected = seleccionado == "panel",

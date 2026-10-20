@@ -23,12 +23,20 @@ import androidx.compose.ui.unit.sp
 import com.clemente.cafecampusclemente.data.local.entity.Producto
 import java.util.Locale
 
-private val FondoFormulario = Color(0xFFF7F7FC)
 private val MoradoFormulario = Color(0xFF5046E5)
-private val TextoFormulario = Color(0xFF20243A)
-private val TextoSecundarioFormulario = Color(0xFF85899B)
-private val FondoCampo = Color.White
 private val FondoIcono = Color(0xFFFFF0D6)
+
+private val FondoFormulario: Color
+    @Composable get() = MaterialTheme.colorScheme.background
+
+private val TextoFormulario: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurface
+
+private val TextoSecundarioFormulario: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurfaceVariant
+
+private val FondoCampo: Color
+    @Composable get() = MaterialTheme.colorScheme.surface
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -134,7 +142,7 @@ fun FormularioProductoScreen(
                         modifier = Modifier
                             .size(48.dp)
                             .background(
-                                Color.White.copy(alpha = 0.8f),
+                                MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
                                 RoundedCornerShape(10.dp)
                             ),
                         contentAlignment = Alignment.Center
@@ -181,14 +189,14 @@ fun FormularioProductoScreen(
                             color = if (icono == opcion) {
                                 Color(0xFFE5E2FF)
                             } else {
-                                Color.White
+                                MaterialTheme.colorScheme.surface
                             },
                             border = androidx.compose.foundation.BorderStroke(
                                 1.dp,
                                 if (icono == opcion) {
                                     MoradoFormulario
                                 } else {
-                                    Color(0xFFE9E9F2)
+                                    MaterialTheme.colorScheme.outlineVariant
                                 }
                             )
                         ) {
@@ -457,7 +465,7 @@ private fun coloresCampos() = OutlinedTextFieldDefaults.colors(
     focusedContainerColor = FondoCampo,
     unfocusedContainerColor = FondoCampo,
     focusedBorderColor = MoradoFormulario,
-    unfocusedBorderColor = Color(0xFFE9E9F2),
+    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
     focusedTextColor = TextoFormulario,
     unfocusedTextColor = TextoFormulario,
     focusedPlaceholderColor = TextoSecundarioFormulario,

@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.sp
 import com.clemente.cafecampusclemente.ViewModel.PedidosClienteViewModel
 
 private val NaranjaSeguimiento = Color(0xFFED5909)
-private val FondoSeguimiento = Color(0xFFFFFAF5)
+
+private val FondoSeguimiento: Color
+    @Composable get() = MaterialTheme.colorScheme.background
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +67,7 @@ fun SeguimientoScreen(
             )
         },
         bottomBar = {
-            NavigationBar(containerColor = Color.White) {
+            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                 NavigationBarItem(
                     selected = false,
                     onClick = onVolver,
@@ -185,7 +187,7 @@ fun SeguimientoScreen(
                                             color = when {
                                                 completado -> Color(0xFF169B62)
                                                 actual -> NaranjaSeguimiento
-                                                else -> Color.White
+                                                else -> MaterialTheme.colorScheme.surface
                                             },
                                             shape = CircleShape
                                         ),
@@ -224,13 +226,13 @@ fun SeguimientoScreen(
                                     textoEstadoSeguimiento(etapa),
                                     fontWeight = if (actual) FontWeight.Bold
                                     else FontWeight.Medium,
-                                    color = if (completado) Color(0xFF303030)
-                                    else Color.Gray,
+                                    color = if (completado) MaterialTheme.colorScheme.onSurface
+                                    else MaterialTheme.colorScheme.onSurfaceVariant,
                                     fontSize = 15.sp
                                 )
                                 Text(
                                     descripcionEstadoSeguimiento(etapa),
-                                    color = Color.Gray,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     fontSize = 12.sp
                                 )
                             }
@@ -242,10 +244,10 @@ fun SeguimientoScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 border = androidx.compose.foundation.BorderStroke(
                     1.dp,
-                    Color(0xFFECE7E1)
+                    MaterialTheme.colorScheme.outlineVariant
                 )
             ) {
                 Column(
@@ -259,14 +261,14 @@ fun SeguimientoScreen(
                     )
                     Text(
                         "Pedido #${pedido?.id ?: pedidoId}",
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Total", color = Color.Gray)
+                        Text("Total", color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text(
                             "S/ ${String.format(java.util.Locale.US, "%.2f", pedido?.total ?: 0.0)}",
                             color = NaranjaSeguimiento,

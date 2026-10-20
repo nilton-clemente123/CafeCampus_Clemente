@@ -58,9 +58,11 @@ import com.clemente.cafecampusclemente.ViewModel.MenuViewModel
 import com.clemente.cafecampusclemente.data.local.entity.Producto
 import java.util.Locale
 
-private val FondoCafe = Color(0xFFFFFBF7)
 private val NaranjaCafe = Color(0xFFEA580C)
 private val CremaCafe = Color(0xFFFFEDD5)
+
+private val FondoCafe: Color
+    @Composable get() = MaterialTheme.colorScheme.background
 
 
 @Composable
@@ -115,7 +117,7 @@ fun MenuScreen(
         containerColor = FondoCafe,
         bottomBar = {
             NavigationBar(
-                containerColor = Color.White
+                containerColor = MaterialTheme.colorScheme.surface
             ) {
                 NavigationBarItem(
                     selected = destinoSeleccionado == 0,
@@ -183,7 +185,7 @@ fun MenuScreen(
                         text = "¡Hola, Juan!",
                         fontSize = 23.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF252936)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Spacer(Modifier.height(3.dp))
@@ -191,7 +193,7 @@ fun MenuScreen(
                     Text(
                         text = "¿Qué se te antoja hoy?",
                         fontSize = 12.sp,
-                        color = Color(0xFF777B86)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -213,7 +215,7 @@ fun MenuScreen(
                             imageVector = Icons.Default.ShoppingBag,
                             contentDescription = "Ver carrito",
                             modifier = Modifier.size(25.dp),
-                            tint = Color(0xFF252936)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -227,14 +229,14 @@ fun MenuScreen(
                     .fillMaxWidth()
                     .height(42.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "Buscar",
-                    tint = Color(0xFF8A8D96),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(19.dp)
                 )
 
@@ -246,7 +248,7 @@ fun MenuScreen(
                     modifier = Modifier.weight(1f),
                     singleLine = true,
                     textStyle = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color(0xFF252936)
+                        color = MaterialTheme.colorScheme.onSurface
                     ),
                     decorationBox = { innerTextField ->
                         Box {
@@ -254,7 +256,7 @@ fun MenuScreen(
                                 Text(
                                     text = "Buscar en el menú...",
                                     fontSize = 12.sp,
-                                    color = Color(0xFF999CA5)
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                             innerTextField()
@@ -294,7 +296,7 @@ fun MenuScreen(
                 text = "Populares hoy",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF252936)
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(Modifier.height(10.dp))
@@ -308,7 +310,7 @@ fun MenuScreen(
                 ) {
                     Text(
                         text = "No se encontraron productos",
-                        color = Color(0xFF777B86)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             } else {
@@ -354,7 +356,7 @@ private fun ProductoMenuCard(
             .clickable(onClick = onAbrir),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 1.dp
@@ -398,7 +400,7 @@ private fun ProductoMenuCard(
                 fontSize = 11.sp,
                 lineHeight = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF30333B),
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2
             )
 

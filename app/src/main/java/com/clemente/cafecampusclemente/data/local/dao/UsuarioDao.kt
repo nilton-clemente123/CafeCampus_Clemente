@@ -23,6 +23,15 @@ interface UsuarioDao {
         clave: String
     ): Usuario?
 
+    @Query(
+        """
+        SELECT * FROM usuarios
+        WHERE rol = :rol
+        LIMIT 1
+        """
+    )
+    suspend fun primeroPorRol(rol: String): Usuario?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertar(usuario: Usuario): Long
 

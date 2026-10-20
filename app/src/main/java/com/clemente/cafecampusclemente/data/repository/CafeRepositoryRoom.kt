@@ -28,6 +28,10 @@ class CafeRepositoryRoom(
         return usuarioDao.login(correo, clave)
     }
 
+    override suspend fun usuarioPorRol(rol: String): Usuario? {
+        return usuarioDao.primeroPorRol(rol)
+    }
+
     // Productos
 
     override fun observarProductos(): Flow<List<Producto>> {

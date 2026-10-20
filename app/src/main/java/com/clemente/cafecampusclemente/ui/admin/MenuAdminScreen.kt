@@ -27,14 +27,20 @@ import com.clemente.cafecampusclemente.ViewModel.MenuAdminViewModel
 import com.clemente.cafecampusclemente.data.local.entity.Producto
 import java.util.Locale
 
-private val FondoMenu = Color(0xFFF7F7FC)
 private val MoradoMenu = Color(0xFF5046E5)
-private val TextoMenu = Color(0xFF20243A)
-private val TextoSecundarioMenu = Color(0xFF8A8DA1)
 private val VerdeDisponible = Color(0xFFD9FBE6)
 private val TextoDisponible = Color(0xFF16854B)
 private val FondoAgotado = Color(0xFFFFE2E2)
 private val TextoAgotado = Color(0xFFE54848)
+
+private val FondoMenu: Color
+    @Composable get() = MaterialTheme.colorScheme.background
+
+private val TextoMenu: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurface
+
+private val TextoSecundarioMenu: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurfaceVariant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,13 +133,13 @@ fun MenuAdminScreen(
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = MoradoMenu,
                             selectedLabelColor = Color.White,
-                            containerColor = Color.White,
+                            containerColor = MaterialTheme.colorScheme.surface,
                             labelColor = TextoSecundarioMenu
                         ),
                         border = FilterChipDefaults.filterChipBorder(
                             enabled = true,
                             selected = seleccionada,
-                            borderColor = Color(0xFFE9E9F2),
+                            borderColor = MaterialTheme.colorScheme.outlineVariant,
                             selectedBorderColor = MoradoMenu
                         ),
                         modifier = Modifier.weight(1f)
@@ -222,7 +228,7 @@ fun MenuAdminScreen(
                     Text("Cancelar")
                 }
             },
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         )
     }
 }
@@ -238,7 +244,7 @@ private fun TarjetaProductoAdmin(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 1.dp

@@ -37,6 +37,7 @@ import com.clemente.cafecampusclemente.data.local.relation.PedidoConDetalle
 import com.clemente.cafecampusclemente.data.prefs.PreferenciasStore
 import com.clemente.cafecampusclemente.data.repository.CafeRepositoryRoom
 import com.clemente.cafecampusclemente.model.Rol
+import com.clemente.cafecampusclemente.ui.admin.AjustesScreen
 import com.clemente.cafecampusclemente.ui.admin.BarraNavegacionAdmin
 import com.clemente.cafecampusclemente.ui.admin.DetallePedidoAdminScreen
 import com.clemente.cafecampusclemente.ui.admin.FormularioProductoScreen
@@ -634,6 +635,43 @@ fun NavCafe() {
                     },
                     onVolver = {
                         navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(RutasCafe.AJUSTES) {
+                AjustesScreen(
+                    vm = sesionViewModel,
+                    onVolver = {
+                        navController.popBackStack()
+                    },
+                    onCambiarPerfil = {
+                        val rolObjetivo = sesionViewModel.cambiarPerfil()
+
+                        if (rolObjetivo != null) {
+                            val destino = if (rolObjetivo == Rol.ADMIN) {
+                                RutasCafe.PANEL
+                            } else {
+                                RutasCafe.MENU
+                            }
+
+                            navController.navigate(destino) {
+                                popUpTo(navController.graph.id) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                        }
+                    },
+                    onCerrarSesion = {
+                        sesionViewModel.cerrarSesion()
+
+                        navController.navigate(RutasCafe.LOGIN) {
+                            popUpTo(navController.graph.id) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
                     }
                 )
             }

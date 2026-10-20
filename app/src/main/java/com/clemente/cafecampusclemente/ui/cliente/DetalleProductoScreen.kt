@@ -53,11 +53,17 @@ import com.clemente.cafecampusclemente.data.local.entity.Producto
 import java.util.Locale
 
 private val NaranjaDetalle = Color(0xFFF15A0A)
-private val FondoDetalle = Color(0xFFFFFBF7)
 private val CremaDetalle = Color(0xFFFFEDD5)
-private val TextoDetalle = Color(0xFF30333B)
-private val GrisDetalle = Color(0xFF85858B)
 private val VerdeDisponible = Color(0xFFD9F8E7)
+
+private val FondoDetalle: Color
+    @Composable get() = MaterialTheme.colorScheme.background
+
+private val TextoDetalle: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurface
+
+private val GrisDetalle: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurfaceVariant
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -388,7 +394,7 @@ fun DetalleProductoScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(11.dp))
-                    .background(Color(0xFFFFF4E8))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
                     .padding(horizontal = 11.dp, vertical = 8.dp)
             ) {
                 Text(

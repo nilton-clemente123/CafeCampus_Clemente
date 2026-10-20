@@ -50,13 +50,19 @@ import java.text.NumberFormat
 import java.util.Locale
 
 private val MoradoCafe = Color(0xFF5046E5)
-private val FondoCafe = Color(0xFFF7F7FC)
 private val AzulSuave = Color(0xFFDCEAFF)
 private val NaranjaSuave = Color(0xFFFFF0C2)
 private val VerdeSuave = Color(0xFFD9FBE6)
-private val TextoCafe = Color(0xFF20243A)
-private val TextoSecundario = Color(0xFF777B91)
 private val RojoSuave = Color(0xFFFFE2E2)
+
+private val FondoCafe: Color
+    @Composable get() = MaterialTheme.colorScheme.background
+
+private val TextoCafe: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurface
+
+private val TextoSecundario: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurfaceVariant
 
 @Composable
 fun PanelScreen(
@@ -152,7 +158,7 @@ fun PanelScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.surface
                         ),
                         elevation = CardDefaults.cardElevation(1.dp)
                     ) {
@@ -201,7 +207,7 @@ fun PanelScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.surface
                         )
                     ) {
                         Column(
@@ -266,7 +272,7 @@ private fun EncabezadoPanel() {
             modifier = Modifier
                 .size(42.dp)
                 .clip(CircleShape)
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.surface),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -381,7 +387,7 @@ private fun GraficoPedidos() {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             elevation = CardDefaults.cardElevation(1.dp)
         ) {
             Row(

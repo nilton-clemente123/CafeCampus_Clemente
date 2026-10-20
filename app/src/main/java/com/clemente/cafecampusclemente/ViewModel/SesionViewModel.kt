@@ -32,6 +32,13 @@ class SesionViewModel(
             initialValue = false
         )
 
+    val recibirPedidos: StateFlow<Boolean> =
+        preferencias.recibirPedidos.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = true
+        )
+
     fun login(
         correo: String,
         clave: String,
@@ -68,5 +75,49 @@ class SesionViewModel(
 
     fun cerrarError() {
         _error.value = null
+    }
+
+    // Alterna entre ADMIN y CLIENTE sin volver a pedir credenciales.
+    // Devuelve el rol objetivo para que la UI pueda navegar de inmediato.
+    fun cambiarPerfil(): Rol? {
+        val actual = _usuarioActual.value ?: return null
+
+        val rolObjetivo = if (actual.rol == Rol.ADMIN.name) {
+            Rol.CLIENTE
+        } else {
+            Rol.ADMIN
+        }
+
+        viewModelScope.launch {
+            val usuario = repo.usuarioPorRol(rolObjetivo.name)
+            if (usuario != null) {
+                preferencias.guardarPerfil(usuario.rol)
+                _usuarioActual.value = usuario
+            }
+        }
+
+        return rolObjetivo
+    }
+
+
+    fun cambiarModoOscuro(activado: Boolean) {
+        viewModelScope.launch {
+            preferencias.guardarModoOscuro(activado)
+        }
+    }
+
+    fun cambiarRecepcionPedidos(activado: Boolean) {
+        viewModelScope.launch {
+            preferencias.guardarRecibirPedidos(activado)
+        }
+    }
+
+    fun cerrarSesion() {
+        // Limpia el estado de forma síncrona para evitar que la pantalla de
+        // login detecte al usuario anterior y vuelva a navegar automáticamente.
+        _usuarioActual.value = null
+        viewModelScope.launch {
+            preferencias.cerrarSesion()
+        }
     }
 }
