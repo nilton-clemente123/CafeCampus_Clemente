@@ -9,7 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,12 +24,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.clemente.cafecampusclemente.ViewModel.MenuViewModel
+import com.clemente.cafecampusclemente.ViewModel.PanelAdminViewModel
+import com.clemente.cafecampusclemente.ViewModel.PedidosAdminViewModel
 import com.clemente.cafecampusclemente.ViewModel.PedidosClienteViewModel
 import com.clemente.cafecampusclemente.ViewModel.SesionViewModel
 import com.clemente.cafecampusclemente.data.local.CafeDatabase
+import com.clemente.cafecampusclemente.data.local.relation.PedidoConDetalle
 import com.clemente.cafecampusclemente.data.prefs.PreferenciasStore
 import com.clemente.cafecampusclemente.data.repository.CafeRepositoryRoom
 import com.clemente.cafecampusclemente.model.Rol
+import com.clemente.cafecampusclemente.ui.admin.PanelScreen
+import com.clemente.cafecampusclemente.ui.admin.PedidosAdminScreen
 import com.clemente.cafecampusclemente.ui.cliente.ConfirmarPedidoScreen
 import com.clemente.cafecampusclemente.ui.cliente.DetalleProductoScreen
 import com.clemente.cafecampusclemente.ui.cliente.LoginScreen
@@ -44,7 +51,14 @@ private object RutasCafe {
     const val MIS_PEDIDOS = "misPedidos"
     const val PANEL = "panel"
 
+    const val PEDIDOS_ADMIN = "pedidos_admin"
+
+    const val DETALLE_PEDIDO_ADMIN = "detalle_pedido_admin/{pedidoId}"
+
     fun detalle(productoId: Int) = "detalle/$productoId"
+
+    fun detallePedidoAdmin(pedidoId: Int): String =
+        "detalle_pedido_admin/$pedidoId"
     fun seguimiento(pedidoId: Int) = "seguimiento/$pedidoId"
 }
 
@@ -119,6 +133,47 @@ fun NavCafe() {
     )
 
     val usuarioActual by sesionViewModel.usuarioActual.collectAsState()
+
+
+    val panelAdminViewModel: PanelAdminViewModel = viewModel(
+        factory = remember(repository) {
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(
+                    modelClass: Class<T>
+                ): T {
+                    if (modelClass.isAssignableFrom(PanelAdminViewModel::class.java)) {
+                        return PanelAdminViewModel(repository) as T
+                    }
+                    throw IllegalArgumentException(
+                        "ViewModel desconocido: ${modelClass.name}"
+                    )
+                }
+            }
+        }
+    )
+
+    val pedidosAdminViewModel: PedidosAdminViewModel = viewModel(
+        factory = remember(repository) {
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(
+                    modelClass: Class<T>
+                ): T {
+                    if (modelClass.isAssignableFrom(PedidosAdminViewModel::class.java)) {
+                        return PedidosAdminViewModel(repository) as T
+                    }
+                    throw IllegalArgumentException(
+                        "ViewModel desconocido: ${modelClass.name}"
+                    )
+                }
+            }
+        }
+    )
+
+    var pedidoSeleccionado by remember {
+        mutableStateOf<PedidoConDetalle?>(null)
+    }
 
     NavHost(
         navController = navController,
@@ -366,7 +421,30 @@ fun NavCafe() {
         }
 
         composable(RutasCafe.PANEL) {
-            PantallaTemporal("Panel del administrador")
+            PanelScreen(
+                vm = panelAdminViewModel,
+                onVerPedidos = {
+                    navController.navigate(RutasCafe.PEDIDOS_ADMIN) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+
+        composable(RutasCafe.PEDIDOS_ADMIN) {
+            PedidosAdminScreen(
+                vm = pedidosAdminViewModel,
+                onVolver = {
+                    navController.popBackStack()
+                },
+                onVerDetalle = { pedido ->
+                    pedidoSeleccionado = pedido
+                    navController.navigate(
+                        RutasCafe.detallePedidoAdmin(pedido.pedido.id)
+                    )
+                }
+            )
         }
     }
 }
