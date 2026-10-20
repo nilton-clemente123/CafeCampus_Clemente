@@ -1,6 +1,7 @@
 package com.clemente.cafecampusclemente.ui.cliente
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,7 +15,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -175,21 +179,32 @@ fun ConfirmarPedidoScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(44.dp)
-                                        .background(
-                                            Color(0xFFFFEAD5),
-                                            RoundedCornerShape(12.dp)
-                                        ),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        when (item.producto.nombre.lowercase()) {
-                                            else -> "🍽️"
-                                        },
-                                        fontSize = 22.sp
+                                if (item.producto.imagenRes != 0) {
+                                    Image(
+                                        painter = painterResource(item.producto.imagenRes),
+                                        contentDescription = item.producto.nombre,
+                                        modifier = Modifier
+                                            .size(44.dp)
+                                            .clip(RoundedCornerShape(12.dp)),
+                                        contentScale = ContentScale.Crop
                                     )
+                                } else {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(44.dp)
+                                            .background(
+                                                Color(0xFFFFEAD5),
+                                                RoundedCornerShape(12.dp)
+                                            ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            when (item.producto.nombre.lowercase()) {
+                                                else -> "🍽️"
+                                            },
+                                            fontSize = 22.sp
+                                        )
+                                    }
                                 }
 
                                 Spacer(Modifier.width(10.dp))

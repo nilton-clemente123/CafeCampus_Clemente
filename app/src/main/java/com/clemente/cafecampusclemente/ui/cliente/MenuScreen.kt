@@ -1,5 +1,6 @@
 package com.clemente.cafecampusclemente.ui.cliente
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,6 +51,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -366,27 +369,39 @@ private fun ProductoMenuCard(
             modifier = Modifier.padding(5.dp)
         ) {
             // Imagen ilustrativa del producto.
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(78.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(
-                        when (producto.icono.lowercase()) {
-                            "cafe", "café" -> Color(0xFFE8D5C0)
-                            "jugo" -> Color(0xFFFFE2CB)
-                            "pan" -> Color(0xFFFFE8A3)
-                            "plato" -> Color(0xFFFFEDD5)
-                            "dulce" -> Color(0xFFFFE0E0)
-                            else -> Color(0xFFFFEDD5)
-                        }
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = iconoProductoMenu(producto.icono),
-                    fontSize = 42.sp
+            if (producto.imagenRes != 0) {
+                Image(
+                    painter = painterResource(producto.imagenRes),
+                    contentDescription = producto.nombre,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(78.dp)
+                        .clip(RoundedCornerShape(10.dp)),
+                    contentScale = ContentScale.Crop
                 )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(78.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(
+                            when (producto.icono.lowercase()) {
+                                "cafe", "café" -> Color(0xFFE8D5C0)
+                                "jugo" -> Color(0xFFFFE2CB)
+                                "pan" -> Color(0xFFFFE8A3)
+                                "plato" -> Color(0xFFFFEDD5)
+                                "dulce" -> Color(0xFFFFE0E0)
+                                else -> Color(0xFFFFEDD5)
+                            }
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = iconoProductoMenu(producto.icono),
+                        fontSize = 42.sp
+                    )
+                }
             }
 
             Spacer(Modifier.height(7.dp))

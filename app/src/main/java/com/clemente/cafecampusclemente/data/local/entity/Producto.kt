@@ -18,5 +18,8 @@ data class Producto(
 
     val disponible: Boolean = true,
 
-    val icono: String
+    val icono: String,
+
+    // Recurso drawable opcional (0 = sin imagen, se usa el emoji de "icono").
+    val imagenRes: Int = 0
 )

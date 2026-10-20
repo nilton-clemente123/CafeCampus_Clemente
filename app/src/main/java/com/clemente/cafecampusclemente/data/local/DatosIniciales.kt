@@ -1,6 +1,7 @@
 package com.clemente.cafecampusclemente.data.local
 
 
+import com.clemente.cafecampusclemente.R
 import com.clemente.cafecampusclemente.data.local.entity.Producto
 import com.clemente.cafecampusclemente.data.local.entity.Usuario
 
@@ -19,42 +20,48 @@ object DatosIniciales {
                 descripcion = "Café americano recién preparado",
                 categoria = "Bebidas calientes",
                 precio = 4.00,
-                icono = "cafe"
+                icono = "cafe",
+                imagenRes = R.drawable.cappucino
             ),
             Producto(
                 nombre = "Sándwich de pollo",
                 descripcion = "Sándwich de pollo",
                 categoria = "Comidas",
                 precio = 9.00,
-                icono = "pan"
+                icono = "pan",
+                imagenRes = R.drawable.sandwichpollo
             ),
             Producto(
                 nombre = "Menú del día",
                 descripcion = "Menú preparado del día",
                 categoria = "Menús",
                 precio = 12.00,
-                icono = "plato"
+                icono = "plato",
+                imagenRes = R.drawable.ic_producto_menu
             ),
             Producto(
                 nombre = "Jugo de naranja",
                 descripcion = "Jugo de naranja",
                 categoria = "Jugos",
                 precio = 5.00,
-                icono = "jugo"
+                icono = "jugo",
+                imagenRes = R.drawable.jugonaranja
             ),
             Producto(
                 nombre = "Empanada",
                 descripcion = "Empanada recién horneada",
                 categoria = "Snacks",
                 precio = 4.50,
-                icono = "pan"
+                icono = "pan",
+                imagenRes = R.drawable.empanada
             ),
             Producto(
                 nombre = "Chicha morada",
                 descripcion = "Chicha morada",
                 categoria = "Bebidas frías",
                 precio = 3.50,
-                icono = "botella"
+                icono = "botella",
+                imagenRes = R.drawable.chichamorada
             )
         )
 

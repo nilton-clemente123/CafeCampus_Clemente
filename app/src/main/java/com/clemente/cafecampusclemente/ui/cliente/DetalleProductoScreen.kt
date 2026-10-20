@@ -1,6 +1,7 @@
 
 package com.clemente.cafecampusclemente.ui.cliente
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -162,26 +165,38 @@ fun DetalleProductoScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(182.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(CremaDetalle),
-                contentAlignment = Alignment.Center
-            ) {
-                Surface(
-                    modifier = Modifier.size(78.dp),
-                    shape = CircleShape,
-                    color = Color.White
+            if (producto.imagenRes != 0) {
+                Image(
+                    painter = painterResource(producto.imagenRes),
+                    contentDescription = producto.nombre,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(182.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(182.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(CremaDetalle),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center
+                    Surface(
+                        modifier = Modifier.size(78.dp),
+                        shape = CircleShape,
+                        color = Color.White
                     ) {
-                        Text(
-                            text = iconoProducto(producto.icono),
-                            fontSize = 42.sp
-                        )
+                        Box(
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = iconoProducto(producto.icono),
+                                fontSize = 42.sp
+                            )
+                        }
                     }
                 }
             }

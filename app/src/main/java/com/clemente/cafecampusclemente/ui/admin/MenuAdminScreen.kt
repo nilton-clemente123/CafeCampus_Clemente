@@ -1,5 +1,6 @@
 package com.clemente.cafecampusclemente.ui.admin
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -166,7 +169,7 @@ fun MenuAdminScreen(
                 }
             } else {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.weight(1f),
                     contentPadding = PaddingValues(
                         start = 14.dp,
                         end = 14.dp,
@@ -257,17 +260,28 @@ private fun TarjetaProductoAdmin(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Icono o ilustración del producto
-            Box(
-                modifier = Modifier
-                    .size(46.dp)
-                    .clip(RoundedCornerShape(11.dp))
-                    .background(Color(0xFFFFF0D6)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = iconoProducto(producto),
-                    fontSize = 25.sp
+            if (producto.imagenRes != 0) {
+                Image(
+                    painter = painterResource(producto.imagenRes),
+                    contentDescription = producto.nombre,
+                    modifier = Modifier
+                        .size(46.dp)
+                        .clip(RoundedCornerShape(11.dp)),
+                    contentScale = ContentScale.Crop
                 )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(46.dp)
+                        .clip(RoundedCornerShape(11.dp))
+                        .background(Color(0xFFFFF0D6)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = iconoProducto(producto),
+                        fontSize = 25.sp
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(9.dp))

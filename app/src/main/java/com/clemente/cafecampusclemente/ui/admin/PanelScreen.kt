@@ -373,7 +373,9 @@ private fun TarjetaVentas(
 private fun GraficoPedidos() {
     val horas = listOf("8h", "9h", "10h", "11h", "12h")
     val cantidades = listOf(3, 6, 9, 5, 7)
-    val maximo = cantidades.maxOrNull() ?: 1
+    val maximo = (cantidades.maxOrNull() ?: 1).coerceAtLeast(1)
+    // Altura máxima (en dp) que alcanza la barra con más pedidos.
+    val alturaMaximaBarra = 88f
 
     Column {
         Text(
@@ -393,12 +395,16 @@ private fun GraficoPedidos() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(126.dp)
-                    .padding(horizontal = 15.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                    .padding(horizontal = 15.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.Bottom
             ) {
                 cantidades.forEachIndexed { indice, cantidad ->
+                    // Escala proporcional: la barra más alta mide exactamente
+                    // alturaMaximaBarra y las demás son proporcionales.
+                    val alturaBarra =
+                        alturaMaximaBarra * (cantidad.toFloat() / maximo)
+
                     Column(
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -414,7 +420,7 @@ private fun GraficoPedidos() {
                         Box(
                             modifier = Modifier
                                 .width(25.dp)
-                                .height((cantidad * 7 + 8).dp)
+                                .height(alturaBarra.dp)
                                 .clip(
                                     RoundedCornerShape(
                                         topStart = 6.dp,

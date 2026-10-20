@@ -5,6 +5,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.clemente.cafecampusclemente.R
 import com.clemente.cafecampusclemente.data.local.dao.PedidoDao
 import com.clemente.cafecampusclemente.data.local.dao.ProductoDao
 import com.clemente.cafecampusclemente.data.local.dao.UsuarioDao
@@ -20,7 +23,7 @@ import com.clemente.cafecampusclemente.data.local.entity.Usuario
         Pedido::class,
         DetallePedido::class
     ],
-    version = 1,
+    version = 3,
     exportSchema = false
 )
 abstract class CafeDatabase : RoomDatabase() {
@@ -31,6 +34,50 @@ abstract class CafeDatabase : RoomDatabase() {
 
     companion object {
 
+        private fun asignarImagenesDefault(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                "UPDATE productos SET imagenRes = ${R.drawable.cappucino} " +
+                    "WHERE nombre = 'Café americano'"
+            )
+            db.execSQL(
+                "UPDATE productos SET imagenRes = ${R.drawable.sandwichpollo} " +
+                    "WHERE nombre = 'Sándwich de pollo'"
+            )
+            db.execSQL(
+                "UPDATE productos SET imagenRes = ${R.drawable.ic_producto_menu} " +
+                    "WHERE nombre = 'Menú del día'"
+            )
+            db.execSQL(
+                "UPDATE productos SET imagenRes = ${R.drawable.jugonaranja} " +
+                    "WHERE nombre = 'Jugo de naranja'"
+            )
+            db.execSQL(
+                "UPDATE productos SET imagenRes = ${R.drawable.empanada} " +
+                    "WHERE nombre = 'Empanada'"
+            )
+            db.execSQL(
+                "UPDATE productos SET imagenRes = ${R.drawable.chichamorada} " +
+                    "WHERE nombre = 'Chicha morada'"
+            )
+        }
+
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE productos ADD COLUMN imagenRes INTEGER NOT NULL DEFAULT 0"
+                )
+                asignarImagenesDefault(db)
+            }
+        }
+
+        // Corrige los IDs obsoletos que quedaron de una versión intermedia
+        // que usaba otros drawables (los vectores temporales).
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                asignarImagenesDefault(db)
+            }
+        }
+
         @Volatile
         private var INSTANCE: CafeDatabase? = null
 
@@ -40,7 +87,7 @@ abstract class CafeDatabase : RoomDatabase() {
                     context.applicationContext,
                     CafeDatabase::class.java,
                     "cafecampus.db"
-                ).build().also { INSTANCE = it }
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build().also { INSTANCE = it }
             }
         }
     }

@@ -94,11 +94,6 @@ fun PedidosAdminScreen(
                         fontWeight = FontWeight.Bold,
                         color = PedidosTexto
                     )
-                    Text(
-                        text = "Gestiona los pedidos de la cafetería",
-                        fontSize = 12.sp,
-                        color = PedidosSecundario
-                    )
                 }
             }
 
