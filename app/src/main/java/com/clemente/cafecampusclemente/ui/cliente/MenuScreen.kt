@@ -44,7 +44,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -76,15 +75,13 @@ fun MenuScreen(
     onPedidos: () -> Unit = {},
     onPerfil: () -> Unit = {}
 ) {
-    var busqueda by remember { mutableStateOf("") }
-    var categoriaSeleccionada by remember {
-        mutableStateOf("Todo")
-    }
     var destinoSeleccionado by remember {
         mutableIntStateOf(0)
     }
 
-    val productos by vm.productos.collectAsState()
+    val busqueda by vm.busqueda.collectAsState()
+    val categoriaSeleccionada by vm.categoriaSeleccionada.collectAsState()
+    val productosFiltrados by vm.productosFiltrados.collectAsState()
     val carrito by vm.carrito.collectAsState()
 
     val categorias = listOf(
@@ -93,28 +90,6 @@ fun MenuScreen(
         "Almuerzos",
         "Bebidas"
     )
-
-    val productosFiltrados = productos.filter { producto ->
-        val coincideBusqueda =
-            producto.nombre.contains(busqueda, ignoreCase = true) ||
-                    producto.descripcion.contains(busqueda, ignoreCase = true)
-
-        val coincideCategoria = when (categoriaSeleccionada) {
-            "Todo" -> true
-            "Desayunos" -> producto.categoria.equals(
-                "Desayunos", ignoreCase = true
-            )
-            "Almuerzos" -> producto.categoria.equals(
-                "Almuerzos", ignoreCase = true
-            )
-            "Bebidas" -> producto.categoria.equals(
-                "Bebidas", ignoreCase = true
-            )
-            else -> true
-        }
-
-        coincideBusqueda && coincideCategoria
-    }
 
     Scaffold(
         containerColor = FondoCafe,
@@ -172,7 +147,7 @@ fun MenuScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 25.dp)
         ) {
             Spacer(Modifier.height(12.dp))
 
@@ -247,7 +222,7 @@ fun MenuScreen(
 
                 BasicTextField(
                     value = busqueda,
-                    onValueChange = { busqueda = it },
+                    onValueChange = vm::cambiarBusqueda,
                     modifier = Modifier.weight(1f),
                     singleLine = true,
                     textStyle = MaterialTheme.typography.bodyMedium.copy(
@@ -279,7 +254,7 @@ fun MenuScreen(
                     FilterChip(
                         selected = categoriaSeleccionada == categoria,
                         onClick = {
-                            categoriaSeleccionada = categoria
+                            vm.cambiarCategoria(categoria)
                         },
                         label = {
                             Text(

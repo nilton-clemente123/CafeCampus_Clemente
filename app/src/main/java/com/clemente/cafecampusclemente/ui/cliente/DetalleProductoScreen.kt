@@ -161,7 +161,7 @@ fun DetalleProductoScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 25.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 

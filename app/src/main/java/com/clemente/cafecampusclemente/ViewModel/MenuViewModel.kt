@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 class MenuViewModel(
@@ -22,6 +23,47 @@ class MenuViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
+
+    // Estado de búsqueda.
+    private val _busqueda = MutableStateFlow("")
+    val busqueda: StateFlow<String> = _busqueda.asStateFlow()
+
+    // Categoría seleccionada.
+    private val _categoriaSeleccionada = MutableStateFlow("Todo")
+    val categoriaSeleccionada: StateFlow<String> =
+        _categoriaSeleccionada.asStateFlow()
+
+    // Combina productos + búsqueda + categoría de forma reactiva.
+    val productosFiltrados: StateFlow<List<Producto>> =
+        combine(
+            productos,
+            _busqueda,
+            _categoriaSeleccionada
+        ) { lista, busqueda, categoria ->
+            lista.filter { producto ->
+                val coincideBusqueda = producto.nombre.contains(
+                    busqueda.trim(),
+                    ignoreCase = true
+                )
+
+                val coincideCategoria = categoria == "Todo" ||
+                        producto.categoria.equals(categoria, ignoreCase = true)
+
+                coincideBusqueda && coincideCategoria
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    fun cambiarBusqueda(texto: String) {
+        _busqueda.value = texto
+    }
+
+    fun cambiarCategoria(categoria: String) {
+        _categoriaSeleccionada.value = categoria
+    }
 
     // Contenido del carrito.
     private val _carrito =

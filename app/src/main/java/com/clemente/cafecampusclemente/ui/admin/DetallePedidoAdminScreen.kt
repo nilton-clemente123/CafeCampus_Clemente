@@ -46,7 +46,9 @@ fun DetallePedidoAdminScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(padding)
+                .padding(horizontal = 25.dp),
+
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {

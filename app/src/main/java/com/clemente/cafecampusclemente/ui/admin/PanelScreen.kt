@@ -83,7 +83,7 @@ fun PanelScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 18.dp),
+                .padding(horizontal = 25.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
