@@ -1,8 +1,10 @@
 
 package com.clemente.cafecampusclemente.ui.navigation
 
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,23 +21,31 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.clemente.cafecampusclemente.ViewModel.MenuViewModel
+import com.clemente.cafecampusclemente.ViewModel.PedidosClienteViewModel
+import com.clemente.cafecampusclemente.ViewModel.SesionViewModel
 import com.clemente.cafecampusclemente.data.local.CafeDatabase
 import com.clemente.cafecampusclemente.data.prefs.PreferenciasStore
 import com.clemente.cafecampusclemente.data.repository.CafeRepositoryRoom
 import com.clemente.cafecampusclemente.model.Rol
+import com.clemente.cafecampusclemente.ui.cliente.ConfirmarPedidoScreen
 import com.clemente.cafecampusclemente.ui.cliente.DetalleProductoScreen
 import com.clemente.cafecampusclemente.ui.cliente.LoginScreen
 import com.clemente.cafecampusclemente.ui.cliente.MenuScreen
-import com.clemente.cafecampusclemente.ViewModel.MenuViewModel
-import com.clemente.cafecampusclemente.ViewModel.SesionViewModel
+import com.clemente.cafecampusclemente.ui.cliente.MisPedidosScreen
+import com.clemente.cafecampusclemente.ui.cliente.SeguimientoScreen
 
 private object RutasCafe {
     const val LOGIN = "login"
     const val MENU = "menu"
     const val DETALLE = "detalle/{productoId}"
+    const val CONFIRMAR_PEDIDO = "confirmarPedido"
+    const val SEGUIMIENTO = "seguimiento/{pedidoId}"
+    const val MIS_PEDIDOS = "misPedidos"
     const val PANEL = "panel"
 
     fun detalle(productoId: Int) = "detalle/$productoId"
+    fun seguimiento(pedidoId: Int) = "seguimiento/$pedidoId"
 }
 
 @Composable
@@ -66,7 +76,8 @@ fun NavCafe() {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>
                 ): T {
-                    if (modelClass.isAssignableFrom(
+                    if (
+                        modelClass.isAssignableFrom(
                             SesionViewModel::class.java
                         )
                     ) {
@@ -91,7 +102,8 @@ fun NavCafe() {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>
                 ): T {
-                    if (modelClass.isAssignableFrom(
+                    if (
+                        modelClass.isAssignableFrom(
                             MenuViewModel::class.java
                         )
                     ) {
@@ -105,6 +117,8 @@ fun NavCafe() {
             }
         }
     )
+
+    val usuarioActual by sesionViewModel.usuarioActual.collectAsState()
 
     NavHost(
         navController = navController,
@@ -138,13 +152,18 @@ fun NavCafe() {
                         RutasCafe.detalle(productoId)
                     )
                 },
+                onPedido = {
+                    navController.navigate(
+                        RutasCafe.CONFIRMAR_PEDIDO
+                    )
+                },
                 onPedidos = {
-                    // La pantalla de pedidos se implementará
-                    // en un commit posterior.
+                    navController.navigate(
+                        RutasCafe.MIS_PEDIDOS
+                    )
                 },
                 onPerfil = {
-                    // La pantalla de perfil se implementará
-                    // en un commit posterior.
+                    // Pendiente hasta implementar la pantalla de perfil.
                 }
             )
         }
@@ -161,7 +180,6 @@ fun NavCafe() {
                 backStackEntry.arguments?.getInt("productoId")
 
             val productos by menuViewModel.productos.collectAsState()
-
             val producto = productos.firstOrNull {
                 it.id == productoId
             }
@@ -178,19 +196,177 @@ fun NavCafe() {
                     }
                 )
             } else {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Producto no encontrado")
+                PantallaTemporal("Producto no encontrado")
+            }
+        }
+
+        composable(RutasCafe.CONFIRMAR_PEDIDO) {
+            val clienteId = usuarioActual?.id
+
+            if (clienteId == null) {
+                PantallaTemporal(
+                    texto = "Inicia sesión para confirmar tu pedido."
+                )
+            } else {
+                val pedidosViewModel: PedidosClienteViewModel = viewModel(
+                    key = "pedidos_cliente_$clienteId",
+                    factory = remember(repository, clienteId) {
+                        object : ViewModelProvider.Factory {
+                            @Suppress("UNCHECKED_CAST")
+                            override fun <T : ViewModel> create(
+                                modelClass: Class<T>
+                            ): T {
+                                if (
+                                    modelClass.isAssignableFrom(
+                                        PedidosClienteViewModel::class.java
+                                    )
+                                ) {
+                                    return PedidosClienteViewModel(
+                                        repository = repository,
+                                        clienteId = clienteId
+                                    ) as T
+                                }
+
+                                throw IllegalArgumentException(
+                                    "ViewModel desconocido: ${modelClass.name}"
+                                )
+                            }
+                        }
+                    }
+                )
+
+                val carrito by menuViewModel.carrito.collectAsState()
+
+                ConfirmarPedidoScreen(
+                    items = carrito,
+                    vm = pedidosViewModel,
+                    onVolver = {
+                        navController.popBackStack()
+                    },
+                    onSeguirPidiendo = {
+                        navController.popBackStack(
+                            RutasCafe.MENU,
+                            inclusive = false
+                        )
+                    },
+                    onPedidoConfirmado = { pedidoId ->
+                        navController.navigate(
+                            RutasCafe.seguimiento(pedidoId)
+                        )
+                    },
+                    onVaciarCarrito = {
+                        menuViewModel.vaciar()
+                    }
+                )
+            }
+        }
+
+        composable(
+            route = RutasCafe.SEGUIMIENTO,
+            arguments = listOf(
+                navArgument("pedidoId") {
+                    type = NavType.IntType
                 }
+            )
+        ) { backStackEntry ->
+            val pedidoId =
+                backStackEntry.arguments?.getInt("pedidoId")
+
+            val clienteId = usuarioActual?.id
+
+            if (pedidoId == null || clienteId == null) {
+                PantallaTemporal(
+                    texto = "No se pudo cargar el seguimiento."
+                )
+            } else {
+                val pedidosViewModel: PedidosClienteViewModel = viewModel(
+                    key = "pedidos_cliente_$clienteId",
+                    factory = remember(repository, clienteId) {
+                        object : ViewModelProvider.Factory {
+                            @Suppress("UNCHECKED_CAST")
+                            override fun <T : ViewModel> create(
+                                modelClass: Class<T>
+                            ): T {
+                                if (
+                                    modelClass.isAssignableFrom(
+                                        PedidosClienteViewModel::class.java
+                                    )
+                                ) {
+                                    return PedidosClienteViewModel(
+                                        repository = repository,
+                                        clienteId = clienteId
+                                    ) as T
+                                }
+
+                                throw IllegalArgumentException(
+                                    "ViewModel desconocido: ${modelClass.name}"
+                                )
+                            }
+                        }
+                    }
+                )
+
+                SeguimientoScreen(
+                    pedidoId = pedidoId,
+                    vm = pedidosViewModel,
+                    onVolver = {
+                        navController.popBackStack()
+                    },
+                    onVerMisPedidos = {
+                        navController.navigate(RutasCafe.MIS_PEDIDOS)
+                    }
+                )
+            }
+        }
+
+        composable(RutasCafe.MIS_PEDIDOS) {
+            val clienteId = usuarioActual?.id
+
+            if (clienteId == null) {
+                PantallaTemporal(
+                    texto = "Inicia sesión para ver tus pedidos."
+                )
+            } else {
+                val pedidosViewModel: PedidosClienteViewModel = viewModel(
+                    key = "pedidos_cliente_$clienteId",
+                    factory = remember(repository, clienteId) {
+                        object : ViewModelProvider.Factory {
+                            @Suppress("UNCHECKED_CAST")
+                            override fun <T : ViewModel> create(
+                                modelClass: Class<T>
+                            ): T {
+                                if (
+                                    modelClass.isAssignableFrom(
+                                        PedidosClienteViewModel::class.java
+                                    )
+                                ) {
+                                    return PedidosClienteViewModel(
+                                        repository = repository,
+                                        clienteId = clienteId
+                                    ) as T
+                                }
+
+                                throw IllegalArgumentException(
+                                    "ViewModel desconocido: ${modelClass.name}"
+                                )
+                            }
+                        }
+                    }
+                )
+
+                MisPedidosScreen(
+                    vm = pedidosViewModel,
+                    onSeleccionarPedido = { pedidoId ->
+                        navController.navigate(
+                            RutasCafe.seguimiento(pedidoId)
+                        )
+                    }
+                )
             }
         }
 
         composable(RutasCafe.PANEL) {
-            PantallaTemporal(
-                texto = "Panel del administrador"
-            )
+            PantallaTemporal("Panel del administrador")
         }
     }
 }
@@ -204,4 +380,3 @@ private fun PantallaTemporal(texto: String) {
         Text(texto)
     }
 }
-

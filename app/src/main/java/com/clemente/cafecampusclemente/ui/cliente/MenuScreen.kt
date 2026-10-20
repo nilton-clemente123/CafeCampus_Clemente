@@ -67,6 +67,7 @@ private val CremaCafe = Color(0xFFFFEDD5)
 fun MenuScreen(
     vm: MenuViewModel,
     onProducto: (Int) -> Unit,
+    onPedido: () -> Unit = {},
     onPedidos: () -> Unit = {},
     onPerfil: () -> Unit = {}
 ) {
@@ -206,7 +207,7 @@ fun MenuScreen(
                     }
                 ) {
                     IconButton(
-                        onClick = onPedidos
+                        onClick = onPedido
                     ) {
                         Icon(
                             imageVector = Icons.Default.ShoppingBag,
