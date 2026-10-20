@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -85,6 +86,15 @@ class PedidosAdminViewModel(
     ) {
         viewModelScope.launch {
             repo.cambiarEstado(pedidoId, estado)
+        }
+    }
+
+    fun cancelarPorId(pedidoId: Int) {
+        viewModelScope.launch {
+            val detalle = repo.observarPedido(pedidoId).first()
+                ?: return@launch
+
+            cancelar(detalle)
         }
     }
 }

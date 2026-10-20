@@ -72,57 +72,6 @@ fun PanelScreen(
 
     Scaffold(
         containerColor = FondoCafe,
-        bottomBar = {
-            NavigationBar(
-                containerColor = Color.White,
-                contentColor = MoradoCafe
-            ) {
-                NavigationBarItem(
-                    selected = true,
-                    onClick = {},
-                    icon = {
-                        Icon(
-                            Icons.Default.BarChart,
-                            contentDescription = "Panel"
-                        )
-                    },
-                    label = { Text("Panel") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = onVerPedidos,
-                    icon = {
-                        Icon(
-                            Icons.Default.ShoppingBag,
-                            contentDescription = "Pedidos"
-                        )
-                    },
-                    label = { Text("Pedidos") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = onIrMenu,
-                    icon = {
-                        Icon(
-                            Icons.Default.Coffee,
-                            contentDescription = "Menú"
-                        )
-                    },
-                    label = { Text("Menú") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = onIrAjustes,
-                    icon = {
-                        Icon(
-                            Icons.Default.Settings,
-                            contentDescription = "Ajustes"
-                        )
-                    },
-                    label = { Text("Ajustes") }
-                )
-            }
-        }
     ) { padding ->
         LazyColumn(
             modifier = Modifier
