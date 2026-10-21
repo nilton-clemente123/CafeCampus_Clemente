@@ -520,6 +520,12 @@ fun NavCafe() {
                             navController.navigate(
                                 RutasCafe.seguimiento(pedidoId)
                             )
+                        },
+                        onVolverMenu = {
+                            navController.navigate(RutasCafe.MENU) {
+                                popUpTo(RutasCafe.MENU) { inclusive = false }
+                                launchSingleTop = true
+                            }
                         }
                     )
                 }

@@ -31,7 +31,8 @@ private val FondoMisPedidos: Color
 @Composable
 fun MisPedidosScreen(
     vm: PedidosClienteViewModel,
-    onSeleccionarPedido: (Int) -> Unit
+    onSeleccionarPedido: (Int) -> Unit,
+    onVolverMenu: () -> Unit
 ) {
     val pedidos by vm.misPedidos.collectAsState()
     var mostrarActivos by remember { mutableStateOf(true) }
@@ -65,7 +66,7 @@ fun MisPedidosScreen(
             NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                 NavigationBarItem(
                     selected = false,
-                    onClick = { },
+                    onClick = onVolverMenu,
                     icon = { Text("⌂", fontSize = 22.sp) },
                     label = { Text("Menú") }
                 )
