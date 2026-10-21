@@ -87,7 +87,16 @@ abstract class CafeDatabase : RoomDatabase() {
                     context.applicationContext,
                     CafeDatabase::class.java,
                     "cafecampus.db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build().also { INSTANCE = it }
+                )
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    // Permite recrear la BD cuando no hay migración disponible,
+                    // incluyendo downgrades (p. ej. una BD v5 en el dispositivo
+                    // frente a una versión menor en el código). La app vuelve a
+                    // sembrar los datos en una BD vacía, por lo que es seguro.
+                    .fallbackToDestructiveMigration(dropAllTables = true)
+                    .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
+                    .build()
+                    .also { INSTANCE = it }
             }
         }
     }
