@@ -32,6 +32,14 @@ class CafeRepositoryRoom(
         return usuarioDao.primeroPorRol(rol)
     }
 
+    override suspend fun usuarioPorCorreo(correo: String): Usuario? {
+        return usuarioDao.buscarPorCorreo(correo)
+    }
+
+    override suspend fun registrarUsuario(usuario: Usuario): Long {
+        return usuarioDao.insertar(usuario)
+    }
+
     // Productos
 
     override fun observarProductos(): Flow<List<Producto>> {

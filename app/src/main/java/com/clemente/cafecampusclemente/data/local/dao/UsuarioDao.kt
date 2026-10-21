@@ -32,6 +32,15 @@ interface UsuarioDao {
     )
     suspend fun primeroPorRol(rol: String): Usuario?
 
+    @Query(
+        """
+        SELECT * FROM usuarios
+        WHERE correo = :correo
+        LIMIT 1
+        """
+    )
+    suspend fun buscarPorCorreo(correo: String): Usuario?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertar(usuario: Usuario): Long
 

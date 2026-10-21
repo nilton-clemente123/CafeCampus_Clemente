@@ -62,7 +62,8 @@ private val TextoSecundario: Color
 @Composable
 fun LoginScreen(
     vm: SesionViewModel,
-    onLoginExitoso: (Rol) -> Unit
+    onLoginExitoso: (Rol) -> Unit,
+    onRegistrarse: () -> Unit
 ) {
     var correo by remember { mutableStateOf("") }
     var clave by remember { mutableStateOf("") }
@@ -304,7 +305,7 @@ fun LoginScreen(
                             fontWeight = FontWeight.Bold,
                             color = NaranjaCafe,
                             modifier = Modifier.clickable {
-                                // Registro pendiente de implementar.
+                                onRegistrarse()
                             }
                         )
                     }

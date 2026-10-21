@@ -25,6 +25,10 @@ class SesionViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
+    private val _registroExitoso = MutableStateFlow(false)
+    val registroExitoso: StateFlow<Boolean> =
+        _registroExitoso.asStateFlow()
+
     val modoOscuro: StateFlow<Boolean> =
         preferencias.modoOscuro.stateIn(
             scope = viewModelScope,
@@ -75,6 +79,50 @@ class SesionViewModel(
 
     fun cerrarError() {
         _error.value = null
+    }
+
+    fun resetRegistro() {
+        _registroExitoso.value = false
+        _error.value = null
+    }
+
+    fun registrarEstudiante(
+        nombre: String,
+        correo: String,
+        clave: String
+    ) {
+        viewModelScope.launch {
+            _error.value = null
+            _registroExitoso.value = false
+
+            if (nombre.isBlank() || correo.isBlank() || clave.isBlank()) {
+                _error.value = "Completa todos los campos"
+                return@launch
+            }
+
+            val correoLimpio = correo.trim()
+            if (!correoLimpio.contains("@")) {
+                _error.value = "Ingresa un correo electrónico válido"
+                return@launch
+            }
+
+            // Valida que el correo sea único para evitar duplicados.
+            val existente = repo.usuarioPorCorreo(correoLimpio)
+            if (existente != null) {
+                _error.value = "El correo ya está registrado"
+                return@launch
+            }
+
+            val usuario = Usuario(
+                nombre = nombre.trim(),
+                correo = correoLimpio,
+                clave = clave,
+                rol = Rol.CLIENTE.name
+            )
+
+            repo.registrarUsuario(usuario)
+            _registroExitoso.value = true
+        }
     }
 
     // Alterna entre ADMIN y CLIENTE sin volver a pedir credenciales.

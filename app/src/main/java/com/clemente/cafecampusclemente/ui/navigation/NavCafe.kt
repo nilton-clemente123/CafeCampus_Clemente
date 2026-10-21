@@ -49,10 +49,12 @@ import com.clemente.cafecampusclemente.ui.cliente.DetalleProductoScreen
 import com.clemente.cafecampusclemente.ui.cliente.LoginScreen
 import com.clemente.cafecampusclemente.ui.cliente.MenuScreen
 import com.clemente.cafecampusclemente.ui.cliente.MisPedidosScreen
+import com.clemente.cafecampusclemente.ui.cliente.RegistroScreen
 import com.clemente.cafecampusclemente.ui.cliente.SeguimientoScreen
 
 private object RutasCafe {
     const val LOGIN = "login"
+    const val REGISTRO = "registro"
     const val MENU = "menu"
     const val DETALLE = "detalle/{productoId}"
     const val CONFIRMAR_PEDIDO = "confirmarPedido"
@@ -287,6 +289,21 @@ fun NavCafe() {
                             }
                             launchSingleTop = true
                         }
+                    },
+                    onRegistrarse = {
+                        navController.navigate(RutasCafe.REGISTRO)
+                    }
+                )
+            }
+
+            composable(RutasCafe.REGISTRO) {
+                RegistroScreen(
+                    vm = sesionViewModel,
+                    onVolver = {
+                        navController.popBackStack()
+                    },
+                    onRegistrado = {
+                        navController.popBackStack()
                     }
                 )
             }
