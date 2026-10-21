@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.clemente.cafecampusclemente.ViewModel.MenuAdminViewModel
 import com.clemente.cafecampusclemente.data.local.entity.Producto
+import com.clemente.cafecampusclemente.ui.esImagenValida
 import java.util.Locale
 
 private val MoradoMenu = Color(0xFF5046E5)
@@ -261,7 +262,7 @@ private fun TarjetaProductoAdmin(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Icono o ilustración del producto
-            if (producto.imagenRes != 0) {
+            if (esImagenValida(producto.imagenRes)) {
                 Image(
                     painter = painterResource(producto.imagenRes),
                     contentDescription = producto.nombre,

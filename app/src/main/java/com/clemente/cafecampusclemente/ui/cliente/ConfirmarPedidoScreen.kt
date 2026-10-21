@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.clemente.cafecampusclemente.ViewModel.PedidosClienteViewModel
 import com.clemente.cafecampusclemente.model.ItemCarrito
+import com.clemente.cafecampusclemente.ui.esImagenValida
 import java.util.Locale
 
 private val NaranjaCafe = Color(0xFFED5909)
@@ -179,7 +180,7 @@ fun ConfirmarPedidoScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                if (item.producto.imagenRes != 0) {
+                                if (esImagenValida(item.producto.imagenRes)) {
                                     Image(
                                         painter = painterResource(item.producto.imagenRes),
                                         contentDescription = item.producto.nombre,

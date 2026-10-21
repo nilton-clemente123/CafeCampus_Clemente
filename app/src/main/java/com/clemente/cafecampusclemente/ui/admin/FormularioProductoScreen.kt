@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.clemente.cafecampusclemente.data.local.entity.Producto
+import com.clemente.cafecampusclemente.ui.esImagenValida
 import java.util.Locale
 
 private val MoradoFormulario = Color(0xFF5046E5)
@@ -143,7 +144,7 @@ fun FormularioProductoScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val imagenRes = producto?.imagenRes ?: 0
-                    if (imagenRes != 0) {
+                    if (esImagenValida(imagenRes)) {
                         Image(
                             painter = painterResource(imagenRes),
                             contentDescription = producto?.nombre,

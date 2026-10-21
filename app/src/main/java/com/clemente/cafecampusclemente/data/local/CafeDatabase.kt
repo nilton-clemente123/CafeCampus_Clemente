@@ -26,7 +26,7 @@ import com.clemente.cafecampusclemente.data.local.entity.Voto
         DetallePedido::class,
         Voto::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class CafeDatabase : RoomDatabase() {
@@ -106,6 +106,16 @@ abstract class CafeDatabase : RoomDatabase() {
             }
         }
 
+        // Reasigna las imágenes por nombre para sincronizar los IDs de
+        // drawable con el build actual. Los IDs de recursos de Android NO son
+        // estables entre compilaciones y, si quedan obsoletos en la base de
+        // datos, painterResource() puede lanzar un ClassCastException.
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                asignarImagenesDefault(db)
+            }
+        }
+
         @Volatile
         private var INSTANCE: CafeDatabase? = null
 
@@ -115,7 +125,7 @@ abstract class CafeDatabase : RoomDatabase() {
                     context.applicationContext,
                     CafeDatabase::class.java,
                     "cafecampus.db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build().also { INSTANCE = it }
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5).build().also { INSTANCE = it }
             }
         }
     }

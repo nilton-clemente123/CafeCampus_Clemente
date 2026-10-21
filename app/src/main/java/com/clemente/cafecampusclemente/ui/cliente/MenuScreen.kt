@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.clemente.cafecampusclemente.ViewModel.MenuViewModel
 import com.clemente.cafecampusclemente.data.local.entity.Producto
+import com.clemente.cafecampusclemente.ui.esImagenValida
 import java.util.Locale
 
 private val NaranjaCafe = Color(0xFFEA580C)
@@ -385,7 +386,7 @@ private fun ProductoMenuCard(
             modifier = Modifier.padding(5.dp)
         ) {
             // Imagen ilustrativa del producto.
-            if (producto.imagenRes != 0) {
+            if (esImagenValida(producto.imagenRes)) {
                 Image(
                     painter = painterResource(producto.imagenRes),
                     contentDescription = producto.nombre,

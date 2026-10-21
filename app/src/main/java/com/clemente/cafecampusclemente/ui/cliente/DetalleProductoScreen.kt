@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.clemente.cafecampusclemente.ViewModel.MenuViewModel
 import com.clemente.cafecampusclemente.data.local.entity.Producto
+import com.clemente.cafecampusclemente.ui.esImagenValida
 import java.util.Locale
 
 private val NaranjaDetalle = Color(0xFFF15A0A)
@@ -165,7 +166,7 @@ fun DetalleProductoScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
-            if (producto.imagenRes != 0) {
+            if (esImagenValida(producto.imagenRes)) {
                 Image(
                     painter = painterResource(producto.imagenRes),
                     contentDescription = producto.nombre,
