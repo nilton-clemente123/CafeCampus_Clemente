@@ -11,19 +11,22 @@ import com.clemente.cafecampusclemente.R
 import com.clemente.cafecampusclemente.data.local.dao.PedidoDao
 import com.clemente.cafecampusclemente.data.local.dao.ProductoDao
 import com.clemente.cafecampusclemente.data.local.dao.UsuarioDao
+import com.clemente.cafecampusclemente.data.local.dao.VotoDao
 import com.clemente.cafecampusclemente.data.local.entity.DetallePedido
 import com.clemente.cafecampusclemente.data.local.entity.Pedido
 import com.clemente.cafecampusclemente.data.local.entity.Producto
 import com.clemente.cafecampusclemente.data.local.entity.Usuario
+import com.clemente.cafecampusclemente.data.local.entity.Voto
 
 @Database(
     entities = [
         Producto::class,
         Usuario::class,
         Pedido::class,
-        DetallePedido::class
+        DetallePedido::class,
+        Voto::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class CafeDatabase : RoomDatabase() {
@@ -31,6 +34,7 @@ abstract class CafeDatabase : RoomDatabase() {
     abstract fun productoDao(): ProductoDao
     abstract fun usuarioDao(): UsuarioDao
     abstract fun pedidoDao(): PedidoDao
+    abstract fun votoDao(): VotoDao
 
     companion object {
 
@@ -78,6 +82,30 @@ abstract class CafeDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `votos` (" +
+                        "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                        "`estudianteId` INTEGER NOT NULL, " +
+                        "`productoId` INTEGER NOT NULL, " +
+                        "`fecha` INTEGER NOT NULL, " +
+                        "FOREIGN KEY(`estudianteId`) REFERENCES `usuarios`(`id`) " +
+                        "ON UPDATE NO ACTION ON DELETE CASCADE, " +
+                        "FOREIGN KEY(`productoId`) REFERENCES `productos`(`id`) " +
+                        "ON UPDATE NO ACTION ON DELETE CASCADE)"
+                )
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_votos_estudianteId` " +
+                        "ON `votos` (`estudianteId`)"
+                )
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_votos_productoId` " +
+                        "ON `votos` (`productoId`)"
+                )
+            }
+        }
+
         @Volatile
         private var INSTANCE: CafeDatabase? = null
 
@@ -87,7 +115,7 @@ abstract class CafeDatabase : RoomDatabase() {
                     context.applicationContext,
                     CafeDatabase::class.java,
                     "cafecampus.db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build().also { INSTANCE = it }
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build().also { INSTANCE = it }
             }
         }
     }

@@ -33,6 +33,7 @@ import com.clemente.cafecampusclemente.ViewModel.PedidosAdminViewModel
 import com.clemente.cafecampusclemente.ViewModel.PedidosClienteViewModel
 import com.clemente.cafecampusclemente.ViewModel.ReporteViewModel
 import com.clemente.cafecampusclemente.ViewModel.SesionViewModel
+import com.clemente.cafecampusclemente.ViewModel.VotacionViewModel
 import com.clemente.cafecampusclemente.data.local.CafeDatabase
 import com.clemente.cafecampusclemente.data.local.relation.PedidoConDetalle
 import com.clemente.cafecampusclemente.data.prefs.PreferenciasStore
@@ -53,6 +54,7 @@ import com.clemente.cafecampusclemente.ui.cliente.MenuScreen
 import com.clemente.cafecampusclemente.ui.cliente.MisPedidosScreen
 import com.clemente.cafecampusclemente.ui.cliente.RegistroScreen
 import com.clemente.cafecampusclemente.ui.cliente.SeguimientoScreen
+import com.clemente.cafecampusclemente.ui.cliente.VotacionScreen
 
 private object RutasCafe {
     const val LOGIN = "login"
@@ -76,6 +78,7 @@ private object RutasCafe {
 
     const val AJUSTES = "ajustes"
     const val REPORTE = "reporte"
+    const val VOTACION = "votacion"
 
 
 
@@ -107,7 +110,8 @@ fun NavCafe() {
         CafeRepositoryRoom(
             productoDao = db.productoDao(),
             usuarioDao = db.usuarioDao(),
-            pedidoDao = db.pedidoDao()
+            pedidoDao = db.pedidoDao(),
+            votoDao = db.votoDao()
         )
     }
 
@@ -204,6 +208,24 @@ fun NavCafe() {
                 ): T {
                     if (modelClass.isAssignableFrom(ReporteViewModel::class.java)) {
                         return ReporteViewModel(repository) as T
+                    }
+                    throw IllegalArgumentException(
+                        "ViewModel desconocido: ${modelClass.name}"
+                    )
+                }
+            }
+        }
+    )
+
+    val votacionViewModel: VotacionViewModel = viewModel(
+        factory = remember(repository) {
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(
+                    modelClass: Class<T>
+                ): T {
+                    if (modelClass.isAssignableFrom(VotacionViewModel::class.java)) {
+                        return VotacionViewModel(repository) as T
                     }
                     throw IllegalArgumentException(
                         "ViewModel desconocido: ${modelClass.name}"
@@ -349,6 +371,19 @@ fun NavCafe() {
                     },
                     onPerfil = {
                         // Pendiente hasta implementar la pantalla de perfil.
+                    },
+                    onVotar = {
+                        navController.navigate(RutasCafe.VOTACION)
+                    }
+                )
+            }
+
+            composable(RutasCafe.VOTACION) {
+                VotacionScreen(
+                    vm = votacionViewModel,
+                    estudianteId = usuarioActual?.id ?: 0,
+                    onVolver = {
+                        navController.popBackStack()
                     }
                 )
             }

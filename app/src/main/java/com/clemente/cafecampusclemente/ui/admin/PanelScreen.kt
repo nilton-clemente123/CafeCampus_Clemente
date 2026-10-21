@@ -77,6 +77,7 @@ fun PanelScreen(
     val preparando by vm.preparando.collectAsState()
     val listos by vm.listos.collectAsState()
     val ventasHoy by vm.ventasHoy.collectAsState()
+    val votosPorProducto by vm.votosPorProducto.collectAsState()
 
     Scaffold(
         containerColor = FondoCafe,
@@ -136,6 +137,51 @@ fun PanelScreen(
                             color = Color.White,
                             fontSize = 26.sp
                         )
+                    }
+                }
+            }
+
+            item {
+                val ganador = votosPorProducto.firstOrNull()
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Text(
+                            text = "Votación del plato del día",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = TextoCafe
+                        )
+
+                        if (ganador == null) {
+                            Text(
+                                text = "Aún no hay votos hoy.",
+                                fontSize = 12.sp,
+                                color = TextoSecundario
+                            )
+                        } else {
+                            Text(
+                                text = "Ganador: ${ganador.nombreProducto}",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MoradoCafe
+                            )
+                            Text(
+                                text = "${ganador.votos} voto(s) · Total: ${votosPorProducto.sumOf { it.votos }}",
+                                fontSize = 12.sp,
+                                color = TextoSecundario
+                            )
+                        }
                     }
                 }
             }

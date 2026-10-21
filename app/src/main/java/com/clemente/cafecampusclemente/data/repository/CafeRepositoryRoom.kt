@@ -3,14 +3,17 @@ package com.clemente.cafecampusclemente.data.repository
 import com.clemente.cafecampusclemente.data.local.dao.PedidoDao
 import com.clemente.cafecampusclemente.data.local.dao.ProductoDao
 import com.clemente.cafecampusclemente.data.local.dao.UsuarioDao
+import com.clemente.cafecampusclemente.data.local.dao.VotoDao
 import com.clemente.cafecampusclemente.data.local.entity.DetallePedido
 import com.clemente.cafecampusclemente.data.local.entity.Pedido
 import com.clemente.cafecampusclemente.data.local.entity.Producto
 import com.clemente.cafecampusclemente.data.local.entity.Usuario
+import com.clemente.cafecampusclemente.data.local.entity.Voto
 import com.clemente.cafecampusclemente.data.local.relation.PedidoConDetalle
 import com.clemente.cafecampusclemente.model.EstadoPedido
 import com.clemente.cafecampusclemente.model.ItemCarrito
 import com.clemente.cafecampusclemente.model.ProductoMasVendido
+import com.clemente.cafecampusclemente.model.ProductoVotos
 import com.clemente.cafecampusclemente.model.VentasPorPago
 import kotlinx.coroutines.flow.Flow
 import java.util.Calendar
@@ -18,7 +21,8 @@ import java.util.Calendar
 class CafeRepositoryRoom(
     private val productoDao: ProductoDao,
     private val usuarioDao: UsuarioDao,
-    private val pedidoDao: PedidoDao
+    private val pedidoDao: PedidoDao,
+    private val votoDao: VotoDao
 ) : CafeRepository {
 
     // Usuarios
@@ -154,5 +158,34 @@ class CafeRepositoryRoom(
         inicioDia: Long
     ): Flow<List<VentasPorPago>> {
         return pedidoDao.ventasPorPagoDesde(inicioDia)
+    }
+
+    // Votación del plato del día
+
+    override suspend fun registrarVoto(voto: Voto) {
+        votoDao.insertar(voto)
+    }
+
+    override suspend fun votosDelEstudiante(
+        estudianteId: Int,
+        inicioDia: Long
+    ): Int {
+        return votoDao.contarVotosEstudianteAhora(
+            estudianteId,
+            inicioDia
+        )
+    }
+
+    override fun observarVotosEstudiante(
+        estudianteId: Int,
+        inicioDia: Long
+    ): Flow<Int> {
+        return votoDao.contarVotosEstudiante(estudianteId, inicioDia)
+    }
+
+    override fun observarVotosPorProducto(
+        inicioDia: Long
+    ): Flow<List<ProductoVotos>> {
+        return votoDao.votosPorProductoDesde(inicioDia)
     }
 }

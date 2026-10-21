@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.clemente.cafecampusclemente.data.repository.CafeRepository
 import com.clemente.cafecampusclemente.model.EstadoPedido
+import com.clemente.cafecampusclemente.model.ProductoVotos
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -53,5 +54,13 @@ class PanelAdminViewModel(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(5000),
                 0.0
+            )
+
+    val votosPorProducto: StateFlow<List<ProductoVotos>> =
+        repo.observarVotosPorProducto(inicioDelDia())
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                emptyList()
             )
 }

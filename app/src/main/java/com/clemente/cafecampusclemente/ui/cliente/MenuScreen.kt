@@ -73,7 +73,8 @@ fun MenuScreen(
     onProducto: (Int) -> Unit,
     onPedido: () -> Unit = {},
     onPedidos: () -> Unit = {},
-    onPerfil: () -> Unit = {}
+    onPerfil: () -> Unit = {},
+    onVotar: () -> Unit = {}
 ) {
     var destinoSeleccionado by remember {
         mutableIntStateOf(0)
@@ -196,6 +197,46 @@ fun MenuScreen(
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            // Votación del plato del día
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onVotar),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = NaranjaCafe
+                )
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Vota por el plato del día",
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Elige tu favorito para mañana",
+                            color = Color.White.copy(alpha = 0.85f),
+                            fontSize = 12.sp
+                        )
+                    }
+
+                    Text(
+                        text = "›",
+                        color = Color.White,
+                        fontSize = 26.sp
+                    )
                 }
             }
 
