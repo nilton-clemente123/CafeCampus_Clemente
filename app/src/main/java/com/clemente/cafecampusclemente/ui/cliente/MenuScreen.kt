@@ -185,7 +185,7 @@ fun MenuScreen(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = "¡Hola, Juan!",
+                        text = "¡Hola!",
                         fontSize = 23.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
