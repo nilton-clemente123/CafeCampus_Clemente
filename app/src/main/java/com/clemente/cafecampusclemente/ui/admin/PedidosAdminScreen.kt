@@ -71,7 +71,7 @@ fun PedidosAdminScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 18.dp)
+                .padding(horizontal = 25.dp)
         ) {
             Row(
                 modifier = Modifier

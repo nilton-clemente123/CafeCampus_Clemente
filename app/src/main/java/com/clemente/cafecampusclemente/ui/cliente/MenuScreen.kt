@@ -172,7 +172,7 @@ fun MenuScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 25.dp)
         ) {
             Spacer(Modifier.height(12.dp))
 

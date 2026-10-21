@@ -99,7 +99,7 @@ fun AjustesScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 18.dp, vertical = 8.dp),
+                .padding(horizontal = 25.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Tarjeta de perfil

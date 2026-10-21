@@ -10,6 +10,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material.icons.automirrored.filled.ReceiptLong
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -57,6 +60,15 @@ fun MisPedidosScreen(
                         fontWeight = FontWeight.SemiBold
                     )
                 },
+                navigationIcon = {
+                    TextButton(onClick = onVolverMenu) {
+                        Text(
+                            text = "‹",
+                            fontSize = 32.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = FondoMisPedidos
                 )
@@ -67,23 +79,34 @@ fun MisPedidosScreen(
                 NavigationBarItem(
                     selected = false,
                     onClick = onVolverMenu,
-                    icon = { Text("⌂", fontSize = 22.sp) },
+                    icon = {
+                        Icon(
+                            Icons.Default.Storefront,
+                            contentDescription = "Menú"
+                        )
+                    },
                     label = { Text("Menú") }
                 )
                 NavigationBarItem(
                     selected = true,
                     onClick = { mostrarActivos = true },
-                    icon = { Text("☰", fontSize = 20.sp) },
-                    label = { Text("Pedidos") },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = NaranjaMisPedidos,
-                        selectedTextColor = NaranjaMisPedidos
-                    )
+                    icon = {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ReceiptLong,
+                            contentDescription = "Pedidos"
+                        )
+                    },
+                    label = { Text("Pedidos") }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { },
-                    icon = { Text("♙", fontSize = 20.sp) },
+                    icon = {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = "Perfil"
+                        )
+                    },
                     label = { Text("Perfil") }
                 )
             }
@@ -93,7 +116,7 @@ fun MisPedidosScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 25.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Row(

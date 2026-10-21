@@ -108,6 +108,7 @@ fun MenuAdminScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .padding(horizontal = 25.dp)
         ) {
             // Filtros por categoría
             Row(
