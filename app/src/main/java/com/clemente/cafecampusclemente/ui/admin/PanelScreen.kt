@@ -2,6 +2,7 @@ package com.clemente.cafecampusclemente.ui.admin
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -68,6 +69,7 @@ private val TextoSecundario: Color
 fun PanelScreen(
     vm: PanelAdminViewModel,
     onVerPedidos: () -> Unit,
+    onVerReporte: () -> Unit,
     onIrMenu: () -> Unit = {},
     onIrAjustes: () -> Unit = {}
 ) {
@@ -88,6 +90,54 @@ fun PanelScreen(
         ) {
             item {
                 EncabezadoPanel()
+            }
+
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = onVerReporte),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MoradoCafe
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.BarChart,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(28.dp)
+                        )
+
+                        Spacer(Modifier.width(12.dp))
+
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Reporte del día",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "Producto más vendido y ventas por pago",
+                                color = Color.White.copy(alpha = 0.85f),
+                                fontSize = 12.sp
+                            )
+                        }
+
+                        Text(
+                            text = "›",
+                            color = Color.White,
+                            fontSize = 26.sp
+                        )
+                    }
+                }
             }
 
             item {

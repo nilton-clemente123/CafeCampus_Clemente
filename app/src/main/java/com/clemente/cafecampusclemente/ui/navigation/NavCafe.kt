@@ -31,6 +31,7 @@ import com.clemente.cafecampusclemente.ViewModel.MenuViewModel
 import com.clemente.cafecampusclemente.ViewModel.PanelAdminViewModel
 import com.clemente.cafecampusclemente.ViewModel.PedidosAdminViewModel
 import com.clemente.cafecampusclemente.ViewModel.PedidosClienteViewModel
+import com.clemente.cafecampusclemente.ViewModel.ReporteViewModel
 import com.clemente.cafecampusclemente.ViewModel.SesionViewModel
 import com.clemente.cafecampusclemente.data.local.CafeDatabase
 import com.clemente.cafecampusclemente.data.local.relation.PedidoConDetalle
@@ -44,6 +45,7 @@ import com.clemente.cafecampusclemente.ui.admin.FormularioProductoScreen
 import com.clemente.cafecampusclemente.ui.admin.MenuAdminScreen
 import com.clemente.cafecampusclemente.ui.admin.PanelScreen
 import com.clemente.cafecampusclemente.ui.admin.PedidosAdminScreen
+import com.clemente.cafecampusclemente.ui.admin.ReporteScreen
 import com.clemente.cafecampusclemente.ui.cliente.ConfirmarPedidoScreen
 import com.clemente.cafecampusclemente.ui.cliente.DetalleProductoScreen
 import com.clemente.cafecampusclemente.ui.cliente.LoginScreen
@@ -73,6 +75,7 @@ private object RutasCafe {
 
 
     const val AJUSTES = "ajustes"
+    const val REPORTE = "reporte"
 
 
 
@@ -183,6 +186,24 @@ fun NavCafe() {
                 ): T {
                     if (modelClass.isAssignableFrom(PanelAdminViewModel::class.java)) {
                         return PanelAdminViewModel(repository) as T
+                    }
+                    throw IllegalArgumentException(
+                        "ViewModel desconocido: ${modelClass.name}"
+                    )
+                }
+            }
+        }
+    )
+
+    val reporteViewModel: ReporteViewModel = viewModel(
+        factory = remember(repository) {
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(
+                    modelClass: Class<T>
+                ): T {
+                    if (modelClass.isAssignableFrom(ReporteViewModel::class.java)) {
+                        return ReporteViewModel(repository) as T
                     }
                     throw IllegalArgumentException(
                         "ViewModel desconocido: ${modelClass.name}"
@@ -536,6 +557,20 @@ fun NavCafe() {
                         navController.navigate(RutasCafe.PEDIDOS_ADMIN) {
                             launchSingleTop = true
                         }
+                    },
+                    onVerReporte = {
+                        navController.navigate(RutasCafe.REPORTE) {
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
+
+            composable(RutasCafe.REPORTE) {
+                ReporteScreen(
+                    vm = reporteViewModel,
+                    onVolver = {
+                        navController.popBackStack()
                     }
                 )
             }

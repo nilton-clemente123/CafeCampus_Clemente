@@ -33,3 +33,16 @@ No hizo falta corregir lógica: compiló correctmente. Solo verifiqué que la pa
 
 ### **Respeta MVVM?:** 
 Si (la validación y el estado viven en el ViewModel, las operaciones de base de datos en el DAO/Repository, y la interfaz es Compose; la pantalla se integra con la navegación existente)
+
+
+## Prompt 3
+
+Agrega una pantalla de Reporte del día que muestre el producto más vendido y el total de ventas por forma de pago, utilizando datos reales de los pedidos almacenados en Room correspondientes al día actual. La lógica de consulta debe implementarse en DAO y Repository, el ViewModel debe procesar y exponer los resultados mediante Flow o StateFlow, y la interfaz Compose debe mostrar la información de forma clara. Respeta la arquitectura MVVM existente: la View no debe acceder directamente al DAO ni al Repository, y si agregas funciones al Repository, decláralas primero en la interfaz y luego impleméntalas en su clase correspondiente. Integra la pantalla con la navegación existente sin romper las funcionalidades actuales. Inspecciona primero el código del proyecto para reutilizar las entidades, relaciones, consultas y componentes existentes. No uses XML. Muéstrame solo los archivos que cambian.
+
+### **Texto enviado a Gemini:**
+
+### **Que genero la IA:**
+
+### **Que tuve que corregir yo:**
+
+### **Respeta MVVM?:** 

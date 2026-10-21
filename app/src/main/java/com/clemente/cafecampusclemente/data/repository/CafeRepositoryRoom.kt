@@ -10,6 +10,8 @@ import com.clemente.cafecampusclemente.data.local.entity.Usuario
 import com.clemente.cafecampusclemente.data.local.relation.PedidoConDetalle
 import com.clemente.cafecampusclemente.model.EstadoPedido
 import com.clemente.cafecampusclemente.model.ItemCarrito
+import com.clemente.cafecampusclemente.model.ProductoMasVendido
+import com.clemente.cafecampusclemente.model.VentasPorPago
 import kotlinx.coroutines.flow.Flow
 import java.util.Calendar
 
@@ -138,5 +140,19 @@ class CafeRepositoryRoom(
         estado: EstadoPedido
     ): Flow<Int> {
         return pedidoDao.cantidadPorEstado(estado.name)
+    }
+
+    // Reporte del día
+
+    override fun observarProductoMasVendido(
+        inicioDia: Long
+    ): Flow<ProductoMasVendido?> {
+        return pedidoDao.productoMasVendidoDesde(inicioDia)
+    }
+
+    override fun observarVentasPorPago(
+        inicioDia: Long
+    ): Flow<List<VentasPorPago>> {
+        return pedidoDao.ventasPorPagoDesde(inicioDia)
     }
 }

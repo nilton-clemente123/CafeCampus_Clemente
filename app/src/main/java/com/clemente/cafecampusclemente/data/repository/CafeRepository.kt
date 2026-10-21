@@ -6,6 +6,8 @@ import com.clemente.cafecampusclemente.data.local.entity.Usuario
 import com.clemente.cafecampusclemente.data.local.relation.PedidoConDetalle
 import com.clemente.cafecampusclemente.model.EstadoPedido
 import com.clemente.cafecampusclemente.model.ItemCarrito
+import com.clemente.cafecampusclemente.model.ProductoMasVendido
+import com.clemente.cafecampusclemente.model.VentasPorPago
 import kotlinx.coroutines.flow.Flow
 
 interface CafeRepository {
@@ -59,4 +61,13 @@ interface CafeRepository {
     fun observarCantidadPorEstado(
         estado: EstadoPedido
     ): Flow<Int>
+
+    // Reporte del día
+    fun observarProductoMasVendido(
+        inicioDia: Long
+    ): Flow<ProductoMasVendido?>
+
+    fun observarVentasPorPago(
+        inicioDia: Long
+    ): Flow<List<VentasPorPago>>
 }

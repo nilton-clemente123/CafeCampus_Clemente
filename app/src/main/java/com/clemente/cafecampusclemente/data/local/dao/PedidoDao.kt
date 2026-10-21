@@ -7,6 +7,8 @@ import androidx.room.Transaction
 import com.clemente.cafecampusclemente.data.local.entity.DetallePedido
 import com.clemente.cafecampusclemente.data.local.entity.Pedido
 import com.clemente.cafecampusclemente.data.local.relation.PedidoConDetalle
+import com.clemente.cafecampusclemente.model.ProductoMasVendido
+import com.clemente.cafecampusclemente.model.VentasPorPago
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -106,4 +108,29 @@ interface PedidoDao {
         """
     )
     fun cantidadPorEstado(estado: String): Flow<Int>
+
+    @Query(
+        """
+        SELECT nombreProducto, SUM(cantidad) AS cantidad
+        FROM detalle_pedido
+        WHERE pedidoId IN (
+            SELECT id FROM pedidos
+            WHERE fecha >= :inicio AND estado != 'CANCELADO'
+        )
+        GROUP BY nombreProducto
+        ORDER BY cantidad DESC
+        LIMIT 1
+        """
+    )
+    fun productoMasVendidoDesde(inicio: Long): Flow<ProductoMasVendido?>
+
+    @Query(
+        """
+        SELECT pago, SUM(total) AS total
+        FROM pedidos
+        WHERE fecha >= :inicio AND estado != 'CANCELADO'
+        GROUP BY pago
+        """
+    )
+    fun ventasPorPagoDesde(inicio: Long): Flow<List<VentasPorPago>>
 }
