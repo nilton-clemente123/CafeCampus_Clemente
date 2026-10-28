@@ -54,6 +54,7 @@ import com.clemente.cafecampusclemente.ui.cliente.MenuScreen
 import com.clemente.cafecampusclemente.ui.cliente.MisPedidosScreen
 import com.clemente.cafecampusclemente.ui.cliente.RegistroScreen
 import com.clemente.cafecampusclemente.ui.cliente.SeguimientoScreen
+import com.clemente.cafecampusclemente.ui.cliente.SplashScreen
 import com.clemente.cafecampusclemente.ui.cliente.VotacionScreen
 
 private object RutasCafe {
@@ -65,6 +66,8 @@ private object RutasCafe {
     const val SEGUIMIENTO = "seguimiento/{pedidoId}"
     const val MIS_PEDIDOS = "misPedidos"
     const val PANEL = "panel"
+
+    const val INICIO = "inicio"
 
 
     const val PEDIDOS_ADMIN = "pedidos_admin"
@@ -314,8 +317,19 @@ fun NavCafe() {
         NavHost(
             modifier = Modifier.padding(padding),
             navController = navController,
-            startDestination = RutasCafe.LOGIN
+            startDestination = RutasCafe.INICIO
         ) {
+
+            composable(RutasCafe.INICIO) {
+                SplashScreen(
+                    onComenzar = {
+                        navController.navigate(RutasCafe.LOGIN) {
+                            popUpTo(RutasCafe.INICIO) { inclusive = true }
+                        }
+                    }
+                )
+            }
+
             composable(RutasCafe.LOGIN) {
                 LoginScreen(
                     vm = sesionViewModel,
